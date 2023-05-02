@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.19.0.final using JasperReports Library version 6.19.0-646c68931cebf1a58bc65c4359d1f0ca223c5e94  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="single-card-holder" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="45c95ae4-04b3-4ccc-afff-91d92da78964">
+    <property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+    <parameter name="firstName" class="java.lang.String"/>
+    <parameter name="lastName" class="java.lang.String"/>
+    <parameter name="drivingLicenseExpiryDate" class="java.lang.String"/>
+    <parameter name="badgeId" class="java.lang.Integer"/>
+    <parameter name="carBrand" class="java.lang.String"/>
+    <parameter name="carModel" class="java.lang.String"/>
+    <parameter name="color" class="java.lang.String"/>
+    <parameter name="productionYear" class="java.lang.Integer"/>
+    <parameter name="plateNumber" class="java.lang.String"/>
+    <parameter name="insuranceExpiryDate" class="java.lang.String"/>
+    <parameter name="registrationExpiryDate" class="java.lang.String"/>
+    <queryString>
+        <![CDATA[]]>
+    </queryString>
+    <background>
+        <band splitType="Stretch"/>
+    </background>
+    <title>
+        <band height="80" splitType="Stretch">
+            <staticText>
+                <reportElement x="180" y="0" width="200" height="30" uuid="bedd2829-f9fb-4b91-931e-d89a9f4caed4"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="16" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Employee Report]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="0" y="0" width="160" height="30" uuid="f5e8ce4e-49f3-4f13-a11a-019954b8846d"/>
+                <textElement verticalAlignment="Middle">
+                    <font size="16" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Lenel OnGuard]]></text>
+            </staticText>
+            <textField pattern="MMMMM dd, yyyy">
+                <reportElement x="460" y="40" width="90" height="20" uuid="5ebe773d-185c-4333-a274-22f5c603203c">
+                    <property name="com.jaspersoft.studio.unit.y" value="px"/>
+                </reportElement>
+                <textElement textAlignment="Left">
+                    <font size="10"/>
+                </textElement>
+                <textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+            </textField>
+            <line>
+                <reportElement x="0" y="70" width="555" height="1" uuid="49ce4559-868a-4c2c-956f-8acf16f6b5a8">
+                    <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                    <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                </reportElement>
+            </line>
+            <staticText>
+                <reportElement x="395" y="40" width="60" height="20" uuid="c1213316-ac5f-409f-8049-a417240cde38">
+                    <property name="com.jaspersoft.studio.unit.x" value="px"/>
+                    <property name="com.jaspersoft.studio.unit.y" value="px"/>
+                </reportElement>
+                <textElement textAlignment="Right">
+                    <font size="10"/>
+                </textElement>
+                <text><![CDATA[Report date: ]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="0" y="40" width="220" height="30" uuid="8ca1dda9-2257-4f13-99a6-d48504ccafc3"/>
+                <textElement>
+                    <font size="11" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Name: " + $P{firstName} + " " +$P{lastName}]]></textFieldExpression>
+            </textField>
+        </band>
+    </title>
+    <detail>
+        <band height="274" splitType="Stretch">
+            <textField>
+                <reportElement x="0" y="0" width="340" height="15" uuid="9fca479c-0520-42a2-9fc6-4a4da807d9c2">
+                    <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                </reportElement>
+                <textFieldExpression><![CDATA["Badge Id --------------------------------------------------- "+ $P{badgeId}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="0" y="25" width="380" height="15" uuid="22f03cef-bd62-4b76-bf25-87e250facb90">
+                    <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                </reportElement>
+                <textFieldExpression><![CDATA["Driving License Expiry Date --------------------------- " + $P{drivingLicenseExpiryDate}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="0" y="50" width="380" height="15" uuid="729d22d6-d9a1-486c-8b6a-e088aa55e050">
+                    <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                </reportElement>
+                <textFieldExpression><![CDATA["Car Brand -------------------------------------------------- " + $P{carBrand}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="0" y="77" width="380" height="15" uuid="fc30be22-8d2f-4943-8668-c706f364d840">
+                    <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                </reportElement>
+                <textFieldExpression><![CDATA["Car Model -------------------------------------------------- " + $P{carModel}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="0" y="102" width="380" height="15" uuid="6c630aa9-50b6-4b6d-828e-00baf96f9f56">
+                    <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                </reportElement>
+                <textFieldExpression><![CDATA[ "Production Year ------------------------------------------ " + $P{productionYear}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="0" y="130" width="380" height="15" uuid="b1661700-acdd-4d3e-9bb6-3a46b22e2937">
+                    <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                </reportElement>
+                <textFieldExpression><![CDATA["Plate number----------------------------------------------- " + $P{plateNumber}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="0" y="155" width="380" height="15" uuid="8517ae7b-319b-498d-8408-2f33c974184b">
+                    <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                </reportElement>
+                <textFieldExpression><![CDATA["Insurance Expiry Date ---------------------------------- " + $P{insuranceExpiryDate}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="0" y="180" width="380" height="15" uuid="a082b266-be7b-4541-985b-b620972ee5cb">
+                    <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                </reportElement>
+                <textFieldExpression><![CDATA["Registration Expiry Date ------------------------------- " + $P{registrationExpiryDate}]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement x="80" y="204" width="400" height="30" uuid="db5e59bf-6fb8-4afc-b936-f082254e0467"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <text><![CDATA[---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="230" y="230" width="100" height="30" uuid="e32ea8f8-8773-4d5f-8672-b2e56b326ceb"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="12" isBold="true" isItalic="true"/>
+                </textElement>
+                <text><![CDATA[End of report]]></text>
+            </staticText>
+        </band>
+    </detail>
+    <pageFooter>
+        <band height="54" splitType="Stretch"/>
+    </pageFooter>
+    <summary>
+        <band height="42" splitType="Stretch"/>
+    </summary>
+</jasperReport>
