@@ -34,7 +34,7 @@ public class TaskExecutorConfig {
         log.info("task executed");
     }
 
-    @Scheduled(cron = "00 14 00 ? * WED")
+    @Scheduled(cron = "00 41 11 ? * WED")
     public void insuranceExpiryCheckWeeklySchedule(){
 
         cardHoldersService.getCardHoldersLicenseExpireInOneWeek().forEach(cardHolder -> {
