@@ -1,6 +1,6 @@
 package com.atech.pma.service;
 
-import com.atech.pma.entity.mysql.Excel;
+import com.atech.pma.model.ExcelEmployees;
 
 import java.util.List;
 
@@ -10,5 +10,5 @@ import java.util.List;
  */
 public interface ExcelService {
 
-    void saveAllToDatabase(List<Excel> excelList);
+    void saveAllToDatabase(List<ExcelEmployees> excelList);
 }

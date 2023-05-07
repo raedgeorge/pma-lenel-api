@@ -1,6 +1,6 @@
 package com.atech.pma.service.impl;
 
-import com.atech.pma.entity.mysql.Excel;
+import com.atech.pma.model.ExcelEmployees;
 import com.atech.pma.service.ExcelPoijiService;
 import com.poiji.bind.Poiji;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,9 +21,9 @@ public class ExcelPoijiServiceImpl implements ExcelPoijiService {
     private String filePath;
 
     @Override
-    public List<Excel> getListFromExcelFile() {
+    public List<ExcelEmployees> getListFromExcelFile() {
 
         File file = new File(filePath);
-        return Poiji.fromExcel(file, Excel.class);
+        return Poiji.fromExcel(file, ExcelEmployees.class);
     }
 }
