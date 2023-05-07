@@ -10,5 +10,5 @@ import java.util.List;
  */
 public interface ExcelService {
 
-    void saveAllToDatabase(List<ExcelEmployees> excelList);
+    String saveAllToDatabase(List<ExcelEmployees> excelList);
 }

@@ -4,7 +4,6 @@ import com.atech.pma.entity.mysql.CardHolder;
 import com.atech.pma.entity.mysql.CardHolderCarInfo;
 import com.atech.pma.model.ExcelEmployees;
 import com.atech.pma.repository.mysql.CardHolderRepository;
-import com.atech.pma.service.CardHoldersService;
 import com.atech.pma.service.ExcelService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * @author raed abu Sa'da
@@ -23,12 +21,15 @@ import java.util.Locale;
 @Service
 @AllArgsConstructor
 public class ExcelServiceImpl implements ExcelService {
-    
+
     private final CardHolderRepository cardHolderRepository;
-    
+
     @Override
     @Transactional
-    public void saveAllToDatabase(List<ExcelEmployees> excelList) {
+    public String saveAllToDatabase(List<ExcelEmployees> excelList) {
+
+        int currentEmployeesCount = cardHolderRepository.findAll().size();
+        System.out.println("current: " + currentEmployeesCount);
 
         excelList.forEach(employee -> {
 
@@ -36,8 +37,15 @@ public class ExcelServiceImpl implements ExcelService {
             CardHolderCarInfo cardHolderCarInfo = getCardHolderCarInfo(employee);
 
             cardHolder.setCardHolderCarInfo(cardHolderCarInfo);
-            cardHolderRepository.save(cardHolder);
+            if (cardHolderRepository.findCardHolderByBadgeId(cardHolder.getBadgeId()).isEmpty()){
+                cardHolderRepository.save(cardHolder);
+            }
         });
+
+        int updatedEmployeesCount = cardHolderRepository.findAll().size();
+        System.out.println("updated: " + updatedEmployeesCount);
+
+        return updatedEmployeesCount - currentEmployeesCount > 0 ? "true" : "false";
     }
 
     private static CardHolder getCardHolder(ExcelEmployees employee) {

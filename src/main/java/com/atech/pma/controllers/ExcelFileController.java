@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -25,11 +26,9 @@ public class ExcelFileController {
     private final ExcelPoijiService excelPoijiService;
 
     @PutMapping("/upload")
-    public ResponseEntity<?> readEmployeesFromExcelFile(){
+    public ResponseEntity<String> readEmployeesFromExcelFile(@RequestParam("file") String file){
 
-        List<ExcelEmployees> listFromExcelFile = excelPoijiService.getListFromExcelFile();
-        excelService.saveAllToDatabase(listFromExcelFile);
-
-        return ResponseEntity.ok().body(listFromExcelFile);
+        List<ExcelEmployees> listFromExcelFile = excelPoijiService.getListFromExcelFile(file);
+        return ResponseEntity.ok().body(excelService.saveAllToDatabase(listFromExcelFile));
     }
 }

@@ -10,5 +10,5 @@ import java.util.List;
  */
 public interface ExcelPoijiService {
 
-    List<ExcelEmployees> getListFromExcelFile();
+    List<ExcelEmployees> getListFromExcelFile(String fileName);
 }

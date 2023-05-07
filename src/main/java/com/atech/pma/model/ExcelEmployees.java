@@ -3,8 +3,6 @@ package com.atech.pma.model;
 import com.poiji.annotation.ExcelCellName;
 import lombok.Data;
 
-import java.time.LocalDate;
-
 /**
  * @author raed abu Sa'da
  * on 07/05/2023

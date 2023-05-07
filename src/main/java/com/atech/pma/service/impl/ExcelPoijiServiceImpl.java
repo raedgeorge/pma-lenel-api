@@ -3,7 +3,6 @@ package com.atech.pma.service.impl;
 import com.atech.pma.model.ExcelEmployees;
 import com.atech.pma.service.ExcelPoijiService;
 import com.poiji.bind.Poiji;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -17,13 +16,12 @@ import java.util.List;
 @Service
 public class ExcelPoijiServiceImpl implements ExcelPoijiService {
 
-    @Value("${excelFilePath}")
-    private String filePath;
+    private static final String PATH = "D:/";
 
     @Override
-    public List<ExcelEmployees> getListFromExcelFile() {
+    public List<ExcelEmployees> getListFromExcelFile(String fileName) {
 
-        File file = new File(filePath);
+        File file = new File(PATH + fileName);
         return Poiji.fromExcel(file, ExcelEmployees.class);
     }
 }
