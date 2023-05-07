@@ -7,9 +7,12 @@ import com.atech.pma.entity.mysql.EventHistory;
 import com.atech.pma.mappers.CardHolderMapper;
 import com.atech.pma.model.AppUserDTO;
 import com.atech.pma.model.CardHolderDTO;
+import com.atech.pma.repository.mssql.BadgeRepository;
+import com.atech.pma.repository.mssql.EmployeeRepository;
 import com.atech.pma.repository.mysql.CardHolderRepository;
 import com.atech.pma.service.*;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -25,6 +28,7 @@ import java.util.Optional;
  * on 01/04/2023
  */
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class CardHoldersServiceImpl implements CardHoldersService {
@@ -35,23 +39,31 @@ public class CardHoldersServiceImpl implements CardHoldersService {
     private final CardHolderRepository cardHolderRepository;
     private final EmployeeService employeeService;
     private final BadgeService badgeService;
+    private final EmployeeRepository employeeRepository;
+    private final BadgeRepository badgeRepository;
 
     @Override
     @Transactional
     public void populateCardHoldersFromOnguardDB() {
 
-        employeeService.loadAllEmployeesFromOnguard().forEach(employee -> {
+            employeeRepository.findAll().forEach(employee -> {
 
-            Badge badge = badgeService.getBadgeById(employee.getBadgeId());
+            if (badgeRepository.findAllByEmployeeId(employee.getId()).size() > 1){
+                System.out.println("duplicate");
+                System.out.println(badgeRepository.findAllByEmployeeId(employee.getId()));
 
-            if (badge != null){
+                return;
+            }
+
+            Optional<Badge> optionalBadge = badgeRepository.findById(employee.getId());
+
+            if (optionalBadge.isPresent()){
+
+                Badge badge = optionalBadge.get();
 
                 Optional<CardHolder> optionalCardHolder = cardHolderRepository.findCardHolderByBadgeId(badge.getBadgeId());
 
                 if (!optionalCardHolder.isPresent()){
-
-                    System.out.println("new employee added to the system");
-
                     CardHolder cardHolder = new CardHolder();
                     cardHolder.setFirstName(employee.getFirstName());
                     cardHolder.setLastName(employee.getLastName());
@@ -60,7 +72,7 @@ public class CardHoldersServiceImpl implements CardHoldersService {
                     cardHolder.setDrivingLicenseExpiryDate(LocalDate.now());
                     cardHolder.setCardHolderCarInfo(new CardHolderCarInfo());
 
-                    cardHolderRepository.save(cardHolder);
+                  //  cardHolderRepository.save(cardHolder);
                 }
             }
         });

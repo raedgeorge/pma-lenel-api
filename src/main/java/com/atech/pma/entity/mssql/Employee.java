@@ -17,7 +17,7 @@ public class Employee {
 
     @Id
     @Column(name = "ID")
-    private Long id;
+    private int id;
 
     @Column(name = "FIRSTNAME")
     private String firstName;
@@ -26,5 +26,5 @@ public class Employee {
     private String lastName;
 
     @Column(name = "SSNO")
-    private int badgeId;
+    private int employeeId;
 }

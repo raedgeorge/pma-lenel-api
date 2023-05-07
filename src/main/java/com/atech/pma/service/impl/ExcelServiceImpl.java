@@ -29,7 +29,6 @@ public class ExcelServiceImpl implements ExcelService {
     public String saveAllToDatabase(List<ExcelEmployees> excelList) {
 
         int currentEmployeesCount = cardHolderRepository.findAll().size();
-        System.out.println("current: " + currentEmployeesCount);
 
         excelList.forEach(employee -> {
 
@@ -43,7 +42,6 @@ public class ExcelServiceImpl implements ExcelService {
         });
 
         int updatedEmployeesCount = cardHolderRepository.findAll().size();
-        System.out.println("updated: " + updatedEmployeesCount);
 
         return updatedEmployeesCount - currentEmployeesCount > 0 ? "true" : "false";
     }

@@ -25,7 +25,6 @@ public class EmployeesController {
     @GetMapping
     public ResponseEntity<List<Employee>> loadAllEmployees(){
 
-        System.out.println("loading from onguard...");
         return ResponseEntity.ok().body(employeeService.loadAllEmployeesFromOnguard());
     }
 
