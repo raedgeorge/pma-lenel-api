@@ -120,13 +120,14 @@ public class AppUsersController {
 
     /**
      *
-     * @param passwordReset request param
+     * @param appUserDTO request param
      * @return web response DTO
      */
     @PostMapping("/password-reset")
-    public ResponseEntity<WebResponseDTO> resetUserPassword(@RequestBody PasswordReset passwordReset){
+    public ResponseEntity<WebResponseDTO> resetUserPassword(@RequestBody AppUserDTO appUserDTO,
+                                                            @RequestParam("adminId") String adminId){
 
-        WebResponseDTO webResponseDTO = appUserService.changeUserPassword(passwordReset);
+        WebResponseDTO webResponseDTO = appUserService.changeUserPassword(appUserDTO, adminId);
 
         return switch (webResponseDTO.getStatus()) {
             case 202 -> ResponseEntity.accepted().body(webResponseDTO);

@@ -4,7 +4,6 @@ import com.atech.pma.entity.mysql.AppUser;
 import com.atech.pma.entity.mysql.EventHistory;
 import com.atech.pma.mappers.AppUserMapper;
 import com.atech.pma.model.AppUserDTO;
-import com.atech.pma.model.PasswordReset;
 import com.atech.pma.model.WebResponseDTO;
 import com.atech.pma.repository.mysql.AppUserRepository;
 import com.atech.pma.service.AppUserService;
@@ -65,6 +64,7 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
+    @Transactional
     public boolean registerNewUser(AppUserDTO appUserDto) {
 
         AppUserDTO appUserDTO = loadUserByBadgeId(appUserDto.getBadgeId());
@@ -76,6 +76,7 @@ public class AppUserServiceImpl implements AppUserService {
         appUserDto.setLastName(appUserDto.getLastName().substring(0, 1).toUpperCase().concat(appUserDto.getLastName().substring(1)));
 
         appUserDto.setPassword(passwordEncoder.encode(appUserDto.getPassword()));
+
         appUserDto.setRole("user");
         AppUser appUser = appUserMapper.toEntity(appUserDto);
         appUserRepository.save(appUser);
@@ -101,48 +102,77 @@ public class AppUserServiceImpl implements AppUserService {
         return appUserDTOList;
     }
 
+
     @Override
-    public WebResponseDTO changeUserPassword(PasswordReset passwordReset) {
+    public WebResponseDTO changeUserPassword(AppUserDTO appUserDTO, String adminId) {
 
-        WebResponseDTO webResponseDTO;
+        WebResponseDTO webResponseDTO = WebResponseDTO.builder().build();
 
-        Optional<AppUser> optionalAppUser = appUserRepository.getAppUserByBadgeId(passwordReset.getBadgeId());
+        Optional<AppUser> optionalAdmin = appUserRepository.getAppUserByBadgeId(adminId);
+        if (!optionalAdmin.isPresent()){
 
-        if (!optionalAppUser.isPresent()){
-
-           webResponseDTO = WebResponseDTO.builder()
-                                          .status(HttpStatus.BAD_REQUEST.value())
-                                          .message("user is not found in the system!")
-                                          .build();
-
-           saveCurrentEventToDatabase(String.format("ERROR. user change password request failed. user with Id [%s] does not exist", passwordReset.getBadgeId()));
-
-           return webResponseDTO;
+            return WebResponseDTO.builder()
+                        .status(HttpStatus.BAD_REQUEST.value())
+                        .message("admin user not found or user requesting resource is not admin!")
+                        .build();
         }
 
-        AppUser appUser = optionalAppUser.get();
+        AppUser adminUser = optionalAdmin.get();
 
-        if (passwordEncoder.matches(passwordReset.getOldPassword(), appUser.getPassword())){
+        if (adminUser.getRole().equalsIgnoreCase("admin")){
 
-            appUser.setPassword(passwordEncoder.encode(passwordReset.getNewPassword()));
+            Optional<AppUser> optionalAppUser = appUserRepository.getAppUserByBadgeId(appUserDTO.getBadgeId());
+
+            if (!optionalAppUser.isPresent()) {
+
+                webResponseDTO = WebResponseDTO.builder()
+                        .status(HttpStatus.BAD_REQUEST.value())
+                        .message("user is not found in the system!")
+                        .build();
+
+                saveCurrentEventToDatabase(String.format("ERROR. user change password request failed. user with Id [%s] does not exist", appUserDTO.getBadgeId()));
+
+                return webResponseDTO;
+            }
+
+            AppUser appUser = optionalAppUser.get();
+
+            appUser.setPassword(appUserDTO.getPassword() != null ?
+                                passwordEncoder.encode(appUserDTO.getPassword()) : appUser.getPassword());
+
+            appUser.setFirstName(appUserDTO.getFirstName());
+            appUser.setLastName(appUserDTO.getLastName());
+            appUser.setRole(appUserDTO.getRole().toLowerCase());
+            appUser.setBadgeId(appUserDTO.getBadgeId());
+
             appUserRepository.save(appUser);
 
             webResponseDTO = WebResponseDTO.builder()
-                    .status(HttpStatus.ACCEPTED.value())
-                    .message("password changed successfully")
-                    .build();
+                .status(HttpStatus.ACCEPTED.value())
+                .message("user edit success")
+                .build();
 
-            saveCurrentEventToDatabase(String.format("password changed for user with Id [%s]", passwordReset.getBadgeId()));
-        }
-        else {
-            webResponseDTO = WebResponseDTO.builder()
-                    .status(HttpStatus.BAD_REQUEST.value())
-                    .message("old password is wrong!")
-                    .build();
-
-            saveCurrentEventToDatabase(
-                    String.format("ERROR. user change password request failed for user Id [%s]. old password is not correct",
-                                  passwordReset.getBadgeId()));
+//            if (passwordEncoder.matches(appUserDTO.getPassword(), appUser.getPassword())) {
+//
+//                appUser.setPassword(passwordEncoder.encode(appUserDTO.getPassword()));
+//                appUserRepository.save(appUser);
+//
+//                webResponseDTO = WebResponseDTO.builder()
+//                        .status(HttpStatus.ACCEPTED.value())
+//                        .message("password changed successfully")
+//                        .build();
+//
+//                saveCurrentEventToDatabase(String.format("password changed for user with Id [%s]", appUserDTO.getBadgeId()));
+//            } else {
+//                webResponseDTO = WebResponseDTO.builder()
+//                        .status(HttpStatus.BAD_REQUEST.value())
+//                        .message("old password is wrong!")
+//                        .build();
+//
+//                saveCurrentEventToDatabase(
+//                        String.format("ERROR. user change password request failed for user Id [%s]. old password is not correct",
+//                                appUserDTO.getBadgeId()));
+//            }
         }
 
         return webResponseDTO;
