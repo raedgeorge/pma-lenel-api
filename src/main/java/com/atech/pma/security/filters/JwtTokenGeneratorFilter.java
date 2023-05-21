@@ -24,7 +24,7 @@ import static com.atech.pma.constants.AppStaticData.SECRET_KEY;
  */
 public class JwtTokenGeneratorFilter extends OncePerRequestFilter {
 
-    public static final int THIRTY_MINUTES = 1800000;
+    public static final int ONE_HOUR = 3600000;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -40,7 +40,7 @@ public class JwtTokenGeneratorFilter extends OncePerRequestFilter {
                     .setIssuer("LENEL")
                     .setSubject("Access Token")
                     .setIssuedAt(new Date())
-                    .setExpiration(new Date(new Date().getTime() + THIRTY_MINUTES))
+                    .setExpiration(new Date(new Date().getTime() + ONE_HOUR))
                     .claim("username", authentication.getName())
                     .claim("authorities", authentication.getAuthorities())
                     .signWith(secretKey)

@@ -14,7 +14,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
 
 /**
@@ -127,7 +126,20 @@ public class AppUsersController {
     public ResponseEntity<WebResponseDTO> resetUserPassword(@RequestBody AppUserDTO appUserDTO,
                                                             @RequestParam("adminId") String adminId){
 
-        WebResponseDTO webResponseDTO = appUserService.changeUserPassword(appUserDTO, adminId);
+        WebResponseDTO webResponseDTO = appUserService.changeUserPasswordByAdmin(appUserDTO, adminId);
+
+        return switch (webResponseDTO.getStatus()) {
+            case 202 -> ResponseEntity.accepted().body(webResponseDTO);
+            case 400 -> ResponseEntity.badRequest().body(webResponseDTO);
+            default -> ResponseEntity.badRequest().build();
+        };
+    }
+
+    @PostMapping("/user/password-reset")
+    public ResponseEntity<WebResponseDTO> resetNormalUserPassword(@RequestBody PasswordReset passwordReset,
+                                                            @RequestParam("badgeId") String badgeId){
+
+        WebResponseDTO webResponseDTO = appUserService.changeUserPassword(passwordReset, badgeId);
 
         return switch (webResponseDTO.getStatus()) {
             case 202 -> ResponseEntity.accepted().body(webResponseDTO);

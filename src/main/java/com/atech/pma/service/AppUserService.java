@@ -1,6 +1,7 @@
 package com.atech.pma.service;
 
 import com.atech.pma.model.AppUserDTO;
+import com.atech.pma.model.PasswordReset;
 import com.atech.pma.model.WebResponseDTO;
 
 import java.util.List;
@@ -19,5 +20,7 @@ public interface AppUserService {
 
     void deleteUserByBadgeId(String badgeId);
 
-    WebResponseDTO changeUserPassword(AppUserDTO appUserDTO, String adminId);
+    WebResponseDTO changeUserPasswordByAdmin(AppUserDTO appUserDTO, String adminId);
+
+    WebResponseDTO changeUserPassword(PasswordReset passwordReset, String userBadgeId);
 }
