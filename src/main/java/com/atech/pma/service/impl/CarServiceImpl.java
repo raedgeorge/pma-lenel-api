@@ -4,6 +4,7 @@ import com.atech.pma.entity.mysql.Car;
 import com.atech.pma.entity.mysql.CarModel;
 import com.atech.pma.entity.mysql.EventHistory;
 import com.atech.pma.model.AppUserDTO;
+import com.atech.pma.repository.mysql.CarModelRepository;
 import com.atech.pma.repository.mysql.CarRepository;
 import com.atech.pma.service.AppUserService;
 import com.atech.pma.service.CarService;
@@ -27,6 +28,7 @@ public class CarServiceImpl implements CarService {
 
     private final CarRepository carRepository;
     private final AppUserService appUserService;
+    private final CarModelRepository carModelRepository;
     private final EventHistoryService eventHistoryService;
 
     @Override
@@ -92,6 +94,19 @@ public class CarServiceImpl implements CarService {
         saveCurrentEventToDatabase("get a list of all cars in the database");
 
         return carList;
+    }
+
+    @Override
+    public Optional<Car> findByBrandName(String brandName) {
+
+        return carRepository.findByBrandName(brandName);
+    }
+
+    @Override
+    public Optional<CarModel> findByModelName(String modelName) {
+
+        return carModelRepository.findCarModelByModelName(modelName);
+
     }
 
     private String convertFirstLetterToUpperCase(String brandName) {

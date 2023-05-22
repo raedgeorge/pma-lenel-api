@@ -1,9 +1,12 @@
 package com.atech.pma.service.impl;
 
+import com.atech.pma.entity.mysql.Car;
+import com.atech.pma.entity.mysql.CarModel;
 import com.atech.pma.entity.mysql.CardHolder;
 import com.atech.pma.entity.mysql.CardHolderCarInfo;
 import com.atech.pma.model.ExcelEmployees;
 import com.atech.pma.repository.mysql.CardHolderRepository;
+import com.atech.pma.service.CarService;
 import com.atech.pma.service.ExcelService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author raed abu Sa'da
@@ -22,6 +26,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ExcelServiceImpl implements ExcelService {
 
+    private final CarService carService;
     private final CardHolderRepository cardHolderRepository;
 
     @Override
@@ -35,7 +40,10 @@ public class ExcelServiceImpl implements ExcelService {
             CardHolder cardHolder = getCardHolder(employee);
             CardHolderCarInfo cardHolderCarInfo = getCardHolderCarInfo(employee);
 
+            addCarBrandOrCarModelIfNotFoundInDB(cardHolderCarInfo);
+
             cardHolder.setCardHolderCarInfo(cardHolderCarInfo);
+
             if (cardHolderRepository.findCardHolderByBadgeId(cardHolder.getBadgeId()).isEmpty()){
                 cardHolderRepository.save(cardHolder);
             }
@@ -44,6 +52,23 @@ public class ExcelServiceImpl implements ExcelService {
         int updatedEmployeesCount = cardHolderRepository.findAll().size();
 
         return updatedEmployeesCount - currentEmployeesCount > 0 ? "true" : "false";
+    }
+
+    private void addCarBrandOrCarModelIfNotFoundInDB(CardHolderCarInfo cardHolderCarInfo) {
+
+        Optional<Car> optionalCar = carService.findByBrandName(cardHolderCarInfo.getCarBrand());
+
+        if (optionalCar.isPresent()){
+            Optional<CarModel> optionalCarModel = carService.findByModelName(cardHolderCarInfo.getCarModel());
+
+            if (!optionalCarModel.isPresent()){
+                carService.addModelToBrand(cardHolderCarInfo.getCarModel(), optionalCar.get().getBrandName());
+            }
+        }
+        else {
+            carService.addCarBrand(cardHolderCarInfo.getCarBrand());
+            carService.addModelToBrand(cardHolderCarInfo.getCarModel(), cardHolderCarInfo.getCarBrand());
+        }
     }
 
     private static CardHolder getCardHolder(ExcelEmployees employee) {

@@ -1,8 +1,10 @@
 package com.atech.pma.service;
 
 import com.atech.pma.entity.mysql.Car;
+import com.atech.pma.entity.mysql.CarModel;
 
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -15,4 +17,8 @@ public interface CarService {
     String addModelToBrand(String modelName, String brandName);
 
     List<Car> getAllCars();
+
+    Optional<Car> findByBrandName(String brandName);
+
+    Optional<CarModel> findByModelName(String modelName);
 }
