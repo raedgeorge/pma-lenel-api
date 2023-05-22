@@ -106,7 +106,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- needed to read data from excel file and save to database  -->
+        <!-- needed to read data from Excel file and save to database  -->
         <dependency>
             <groupId>com.github.ozlerhakan</groupId>
             <artifactId>poiji</artifactId>
