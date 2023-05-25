@@ -1,0 +1,42 @@
+version: "3.1"
+
+services:
+  db:
+    image: mysql:8.0.32-debian
+    ports:
+      - "3308:3306"
+    volumes:
+      - data:/var/lib/mysql
+    restart: on-failure
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: pma
+
+  db2:
+    image: agiper/mssql
+    ports:
+      - "1433:1433"
+    restart: on-failure
+
+  backend:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: backend
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_MYSQL_DATASOURCE_URL: jdbc:mysql://db:3306/pma?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_MYSQL_DATASOURCE_USERNAME: root
+      SPRING_MYSQL_DATASOURCE_PASSWORD: password
+      SPRING_MYSQL_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+      SPRING_MSSQL_DATASOURCE_URL: jdbc:sqlserver://db2;trustServerCertificate=true;databaseName=accesscontrol
+      SPRING_MSSQL_DATASOURCE_USERNAME: sa
+      SPRING_MSSQL_DATASOURCE_PASSWORD: password
+      SPRING_MSSQL_DATASOURCE_DRIVER_CLASS_NAME: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    depends_on:
+      - db
+    restart: always
+
+volumes:
+  data:
