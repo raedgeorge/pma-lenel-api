@@ -18,6 +18,8 @@ public interface CardHolderRepository extends JpaRepository<CardHolder, Long> {
 
     List<CardHolder> findAllByEmployeeId(int employeeId);
 
+    Optional<CardHolder> findCardHoldersByEmployeeId(int employeeId);
+
     Optional<List<CardHolder>> findAllByDrivingLicenseExpiryDateBetween(LocalDate startDate, LocalDate endDate);
 
     @Query("SELECT e FROM CardHolder e " +

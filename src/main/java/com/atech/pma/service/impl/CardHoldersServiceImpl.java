@@ -1,6 +1,5 @@
 package com.atech.pma.service.impl;
 
-import com.atech.pma.entity.mssql.Badge;
 import com.atech.pma.entity.mssql.Employee;
 import com.atech.pma.entity.mysql.CardHolder;
 import com.atech.pma.entity.mysql.CardHolderCarInfo;
@@ -11,7 +10,9 @@ import com.atech.pma.model.CardHolderDTO;
 import com.atech.pma.repository.mssql.BadgeRepository;
 import com.atech.pma.repository.mssql.EmployeeRepository;
 import com.atech.pma.repository.mysql.CardHolderRepository;
-import com.atech.pma.service.*;
+import com.atech.pma.service.AppUserService;
+import com.atech.pma.service.CardHoldersService;
+import com.atech.pma.service.EventHistoryService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -19,10 +20,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @author raed abu Sa'da
@@ -38,8 +40,6 @@ public class CardHoldersServiceImpl implements CardHoldersService {
     private final CardHolderMapper cardHolderMapper;
     private final EventHistoryService eventHistoryService;
     private final CardHolderRepository cardHolderRepository;
-    private final EmployeeService employeeService;
-    private final BadgeService badgeService;
     private final EmployeeRepository employeeRepository;
     private final BadgeRepository badgeRepository;
 
@@ -52,28 +52,28 @@ public class CardHoldersServiceImpl implements CardHoldersService {
 
             Optional<CardHolder> optionalCardHolder = cardHolderRepository.findCardHolderByBadgeId(badge.getBadgeId());
 
-            if (!optionalCardHolder.isPresent()){
+                if (!optionalCardHolder.isPresent()) {
 
-                Optional<Employee> optionalEmployee = employeeRepository.findById(badge.getEmployeeId());
+                    Optional<Employee> optionalEmployee = employeeRepository.findById(badge.getEmployeeId());
 
-                if (optionalEmployee.isPresent()){
+                    if (optionalEmployee.isPresent()) {
 
-                    Employee employeeInDB = optionalEmployee.get();
-                    CardHolder cardHolder = new CardHolder();
+                        Employee employeeInDB = optionalEmployee.get();
+                        CardHolder cardHolder = new CardHolder();
 
-                    cardHolder.setEmployeeId(employeeInDB.getEmployeeId());
-                    cardHolder.setBadgeId(badge.getBadgeId());
-                    cardHolder.setFirstName(employeeInDB.getFirstName());
-                    cardHolder.setLastName(employeeInDB.getLastName());
-                    cardHolder.setDrivingLicenseExpiryDate(LocalDate.now());
+                        cardHolder.setEmployeeId(employeeInDB.getEmployeeId());
+                        cardHolder.setBadgeId(badge.getBadgeId());
+                        cardHolder.setFirstName(employeeInDB.getFirstName());
+                        cardHolder.setLastName(employeeInDB.getLastName());
+                        cardHolder.setDrivingLicenseExpiryDate(LocalDate.now());
 
-                    CardHolderCarInfo cardHolderCarInfo = new CardHolderCarInfo();
-                    cardHolderCarInfo.setPlateNumber(RandomStringUtils.randomAlphanumeric(6));
-                    cardHolder.setCardHolderCarInfo(cardHolderCarInfo);
+                        CardHolderCarInfo cardHolderCarInfo = new CardHolderCarInfo();
+                        cardHolderCarInfo.setPlateNumber(RandomStringUtils.randomAlphanumeric(6));
+                        cardHolder.setCardHolderCarInfo(cardHolderCarInfo);
 
-                    cardHolderRepository.save(cardHolder);
+                        cardHolderRepository.save(cardHolder);
+                    }
                 }
-            }
         });
     }
 

@@ -35,45 +35,38 @@ public class ExcelServiceImpl implements ExcelService {
 
         int currentEmployeesCount = cardHolderRepository.findAll().size();
 
-        excelList.forEach(employee -> {
-            System.out.println("=====================================================================");
-            System.out.println(employee.getBadgeId() + " :: " + employee.getEmployeeId());
+        excelList.forEach(emp -> {
 
-            Optional<CardHolder> optionalCardHolder = cardHolderRepository.findCardHolderByBadgeId(employee.getBadgeId());
+            Optional<CardHolder> optionalCardHolder = cardHolderRepository.findCardHolderByBadgeId(emp.getBadgeId());
 
-            if (optionalCardHolder.isPresent()) {
+            if (!optionalCardHolder.isPresent()){
 
-                CardHolder cardHolderInDB = optionalCardHolder.get();
-                System.out.println(cardHolderInDB);
-                System.out.println("=====================================================================");
+                CardHolder cardHolder = getCardHolder(emp);
+                CardHolderCarInfo cardHolderCarInfo = getCardHolderCarInfo(emp);
 
-                cardHolderInDB.setDrivingLicenseExpiryDate(getLocalDate(employee.getDrivingLicenseExpiryDate()));
-                CardHolderCarInfo cardHolderCarInfo = getCardHolderCarInfo(employee);
-                addCarBrandOrCarModelIfNotFoundInDB(cardHolderCarInfo);
-                cardHolderInDB.setCardHolderCarInfo(cardHolderCarInfo);
-                cardHolderRepository.save(cardHolderInDB);
-            } else {
-
-                cardHolderRepository.findAllByEmployeeId(employee.getEmployeeId()).forEach(emp -> {
-
-                    System.out.println("badge id: " + emp.getBadgeId());
-
-                    Optional<CardHolder> optCardHolder = cardHolderRepository.findCardHolderByBadgeId(emp.getBadgeId());
-
-                    if (optCardHolder.isPresent()){
-
-                        CardHolder cardHolder = optCardHolder.get();
-                        cardHolder.setDrivingLicenseExpiryDate(getLocalDate(employee.getDrivingLicenseExpiryDate()));
-                        CardHolderCarInfo cardHolderCarInfo = getCardHolderCarInfo(employee);
-                        addCarBrandOrCarModelIfNotFoundInDB(cardHolderCarInfo);
-                        cardHolder.setCardHolderCarInfo(cardHolderCarInfo);
-
-                        cardHolderRepository.save(cardHolder);
-                    }
-                });
+                cardHolder.setCardHolderCarInfo(cardHolderCarInfo);
+                cardHolderRepository.save(cardHolder);
             }
-        });
 
+            cardHolderRepository.findAllByEmployeeId(emp.getEmployeeId()).forEach(employee -> {
+
+                System.out.println(employee.getEmployeeId());
+
+                Optional<CardHolder> optCardHolder = cardHolderRepository.findCardHolderByBadgeId(employee.getBadgeId());
+
+                if (optCardHolder.isPresent()){
+
+                    CardHolder cardHolder = optCardHolder.get();
+                    cardHolder.setDrivingLicenseExpiryDate(getLocalDate(emp.getDrivingLicenseExpiryDate()));
+                    CardHolderCarInfo cardHolderCarInfo = getCardHolderCarInfo(emp);
+                    addCarBrandOrCarModelIfNotFoundInDB(cardHolderCarInfo);
+                    cardHolder.setCardHolderCarInfo(cardHolderCarInfo);
+
+                    cardHolderRepository.save(cardHolder);
+                }
+            });
+
+        });
 
         int updatedEmployeesCount = cardHolderRepository.findAll().size();
 
