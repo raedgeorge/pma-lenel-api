@@ -50,8 +50,6 @@ public class ExcelServiceImpl implements ExcelService {
 
             cardHolderRepository.findAllByEmployeeId(emp.getEmployeeId()).forEach(employee -> {
 
-                System.out.println(employee.getEmployeeId());
-
                 Optional<CardHolder> optCardHolder = cardHolderRepository.findCardHolderByBadgeId(employee.getBadgeId());
 
                 if (optCardHolder.isPresent()){
