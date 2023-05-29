@@ -38,8 +38,6 @@ public class AppUsernamePasswordAuthProvider implements AuthenticationProvider {
         String badgeId = authentication.getName();
         String password = authentication.getCredentials().toString();
 
-        log.info("credentials : {} - {}", badgeId, password);
-
         AppUserDTO appUserDTO = appUserService.loadUserByBadgeId(badgeId);
 
         if (!ObjectUtils.isEmpty(appUserDTO)){

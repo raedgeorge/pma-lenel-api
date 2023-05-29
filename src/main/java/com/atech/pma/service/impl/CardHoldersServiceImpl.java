@@ -1,6 +1,7 @@
 package com.atech.pma.service.impl;
 
 import com.atech.pma.entity.mssql.Badge;
+import com.atech.pma.entity.mssql.Employee;
 import com.atech.pma.entity.mysql.CardHolder;
 import com.atech.pma.entity.mysql.CardHolderCarInfo;
 import com.atech.pma.entity.mysql.EventHistory;
@@ -13,15 +14,15 @@ import com.atech.pma.repository.mysql.CardHolderRepository;
 import com.atech.pma.service.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author raed abu Sa'da
@@ -42,41 +43,38 @@ public class CardHoldersServiceImpl implements CardHoldersService {
     private final EmployeeRepository employeeRepository;
     private final BadgeRepository badgeRepository;
 
+
     @Override
     @Transactional
     public void populateCardHoldersFromOnguardDB() {
 
-            employeeRepository.findAll().forEach(employee -> {
+        badgeRepository.findAll().forEach(badge -> {
 
-            if (badgeRepository.findAllByEmployeeId(employee.getId()).size() > 1){
-                System.out.println("duplicate");
-                System.out.println(badgeRepository.findAllByEmployeeId(employee.getId()));
+            Optional<CardHolder> optionalCardHolder = cardHolderRepository.findCardHolderByBadgeId(badge.getBadgeId());
 
-                return;
-            }
+            if (!optionalCardHolder.isPresent()){
 
-            Optional<Badge> optionalBadge = badgeRepository.findById(employee.getId());
+                Optional<Employee> optionalEmployee = employeeRepository.findById(badge.getEmployeeId());
 
-            if (optionalBadge.isPresent()){
+                if (optionalEmployee.isPresent()){
 
-                Badge badge = optionalBadge.get();
-
-                Optional<CardHolder> optionalCardHolder = cardHolderRepository.findCardHolderByBadgeId(badge.getBadgeId());
-
-                if (!optionalCardHolder.isPresent()){
+                    Employee employeeInDB = optionalEmployee.get();
                     CardHolder cardHolder = new CardHolder();
-                    cardHolder.setFirstName(employee.getFirstName());
-                    cardHolder.setLastName(employee.getLastName());
-                    cardHolder.setBadgeId(badge.getBadgeId());
-                    cardHolder.setEmployeeId(badge.getEmployeeId());
-                    cardHolder.setDrivingLicenseExpiryDate(LocalDate.now());
-                    cardHolder.setCardHolderCarInfo(new CardHolderCarInfo());
 
-                  //  cardHolderRepository.save(cardHolder);
+                    cardHolder.setEmployeeId(employeeInDB.getEmployeeId());
+                    cardHolder.setBadgeId(badge.getBadgeId());
+                    cardHolder.setFirstName(employeeInDB.getFirstName());
+                    cardHolder.setLastName(employeeInDB.getLastName());
+                    cardHolder.setDrivingLicenseExpiryDate(LocalDate.now());
+
+                    CardHolderCarInfo cardHolderCarInfo = new CardHolderCarInfo();
+                    cardHolderCarInfo.setPlateNumber(RandomStringUtils.randomAlphanumeric(6));
+                    cardHolder.setCardHolderCarInfo(cardHolderCarInfo);
+
+                    cardHolderRepository.save(cardHolder);
                 }
             }
         });
-
     }
 
     @Override

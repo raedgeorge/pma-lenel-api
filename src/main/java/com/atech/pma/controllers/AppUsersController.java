@@ -61,8 +61,6 @@ public class AppUsersController {
     @PostMapping("/register")
     public ResponseEntity<String> registerNewAppUser(@RequestBody AppUserDTO appUserDTO){
 
-        log.info("registering new user: " + appUserDTO.getFirstName());
-
         if (appUserService.registerNewUser(appUserDTO)){
             return ResponseEntity.ok().body("user registration complete");
         }
@@ -105,7 +103,6 @@ public class AppUsersController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null){
             username = (String) authentication.getPrincipal();
-            log.info(username);
         }
 
         EventHistory eventHistory  = new EventHistory();

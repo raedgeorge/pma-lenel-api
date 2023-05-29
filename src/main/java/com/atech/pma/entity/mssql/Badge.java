@@ -17,10 +17,13 @@ import lombok.Data;
 public class Badge {
 
     @Id
+    @Column(name = "ID")
+    private int badgeId;
+
     @Column(name = "EMPID")
     private int employeeId;
 
-    @Column(name = "ID")
-    private int badgeId;
+    @Column(name = "BADGEKEY")
+    private int badgeKey;
 
 }

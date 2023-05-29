@@ -46,8 +46,6 @@ public class AppUserServiceImpl implements AppUserService {
         Optional<AppUser> optionalAppUser = appUserRepository.getAppUserByBadgeId(badgeId);
 
         if (!optionalAppUser.isPresent()){
-            log.info("user with badge Id [{}] do not exists", badgeId);
-
             logUserRegistrationFailedEventToDatabase(String.format("ERROR. user with badge Id [%s] do not exists", badgeId));
             return null;
         }
@@ -60,7 +58,6 @@ public class AppUserServiceImpl implements AppUserService {
     public void deleteUserByBadgeId(String badgeId) {
 
         appUserRepository.deleteAppUserByBadgeId(badgeId);
-        log.info("user with badge ID {} deleted", badgeId);
         saveCurrentEventToDatabase(String.format("user with badge ID [%s] deleted", badgeId));
     }
 

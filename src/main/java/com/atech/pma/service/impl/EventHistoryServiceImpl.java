@@ -28,7 +28,7 @@ public class EventHistoryServiceImpl implements EventHistoryService {
 
         List<EventHistoryDTO> eventHistoryDTOList = new ArrayList<>();
 
-        eventHistoryRepository.findAll().forEach(event -> {
+        eventHistoryRepository.findTop500Events().forEach(event -> {
             eventHistoryDTOList.add(eventHistoryMapper.toDto(event));
         });
 

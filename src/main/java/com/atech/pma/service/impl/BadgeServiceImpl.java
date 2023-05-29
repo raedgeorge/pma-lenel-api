@@ -6,6 +6,7 @@ import com.atech.pma.service.BadgeService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -23,7 +24,12 @@ public class BadgeServiceImpl implements BadgeService {
     public Badge getBadgeById(int badgeId) {
 
         Optional<Badge> optionalBadge = badgeRepository.findById(badgeId);
-
         return optionalBadge.orElse(null);
+    }
+
+    @Override
+    public List<Badge> getAllBadges() {
+
+        return badgeRepository.findAll();
     }
 }

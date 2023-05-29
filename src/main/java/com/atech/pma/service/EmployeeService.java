@@ -1,5 +1,6 @@
 package com.atech.pma.service;
 
+import com.atech.pma.entity.mssql.Badge;
 import com.atech.pma.entity.mssql.Employee;
 
 import java.util.List;
@@ -10,5 +11,9 @@ import java.util.List;
  */
 public interface EmployeeService {
 
+    List<Badge> getAllBadges();
+
     List<Employee> loadAllEmployeesFromOnguard();
+
+    List<Badge> getBadgesByEmployeeId(int id);
 }

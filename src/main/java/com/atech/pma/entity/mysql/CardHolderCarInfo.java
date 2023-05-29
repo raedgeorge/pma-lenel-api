@@ -34,7 +34,7 @@ public class CardHolderCarInfo {
     @Column(name = "production_year")
     private int productionYear;
 
-    @Column(name = "plate_number", unique = true)
+    @Column(name = "plate_number", unique = false)
     private String plateNumber;
 
     @Column(name = "insurance_expiry_date")

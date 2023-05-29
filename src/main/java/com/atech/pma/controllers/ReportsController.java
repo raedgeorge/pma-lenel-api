@@ -32,7 +32,6 @@ public class ReportsController {
     /**
      *
      * @param fileFormat pdf or excel
-     * @param response
      */
     @GetMapping
     public void allCardHoldersReport(@RequestParam String fileFormat,
@@ -54,7 +53,6 @@ public class ReportsController {
      * filter data
      * @param startDate start date
      * @param endDate end date
-     * @return card-holders list
      */
     @GetMapping("/filtered")
     public void employeesReportByDrivingLicenseFilter(@RequestParam String startDate,
