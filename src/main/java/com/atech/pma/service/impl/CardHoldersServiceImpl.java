@@ -139,9 +139,12 @@ public class CardHoldersServiceImpl implements CardHoldersService {
 
         Optional<CardHolder> optionalCardHolder = cardHolderRepository.findById(id);
 
-        saveCurrentEventToDatabase(String.format("search for employee with badge id [%s]", optionalCardHolder.get().getBadgeId()));
+        if (optionalCardHolder.isPresent()){
+            saveCurrentEventToDatabase(String.format("search for employee with badge id [%s]", optionalCardHolder.get().getBadgeId()));
+            return optionalCardHolder.get();
+        }
 
-        return optionalCardHolder.orElse(null);
+        return null;
     }
 
     @Override
