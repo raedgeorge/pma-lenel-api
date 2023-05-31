@@ -42,9 +42,14 @@ public class ExcelServiceImpl implements ExcelService {
             if (!optionalCardHolder.isPresent()){
 
                 CardHolder cardHolder = getCardHolder(emp);
-                CardHolderCarInfo cardHolderCarInfo = getCardHolderCarInfo(emp);
+                CardHolderCarInfo cardHolderCarInfoInDb = cardHolder.getCardHolderCarInfo();
 
-                cardHolder.setCardHolderCarInfo(cardHolderCarInfo);
+                if (cardHolderCarInfoInDb == null){
+                    cardHolderCarInfoInDb = new CardHolderCarInfo();
+                }
+
+                cardHolder.setCardHolderCarInfo(getCardHolderCarInfo(emp, cardHolderCarInfoInDb));
+
                 cardHolderRepository.save(cardHolder);
             }
 
@@ -56,7 +61,7 @@ public class ExcelServiceImpl implements ExcelService {
 
                     CardHolder cardHolder = optCardHolder.get();
                     cardHolder.setDrivingLicenseExpiryDate(getLocalDate(emp.getDrivingLicenseExpiryDate()));
-                    CardHolderCarInfo cardHolderCarInfo = getCardHolderCarInfo(emp);
+                    CardHolderCarInfo cardHolderCarInfo = getCardHolderCarInfo(emp, cardHolder.getCardHolderCarInfo());
                     addCarBrandOrCarModelIfNotFoundInDB(cardHolderCarInfo);
                     cardHolder.setCardHolderCarInfo(cardHolderCarInfo);
 
@@ -99,9 +104,8 @@ public class ExcelServiceImpl implements ExcelService {
         return cardHolder;
     }
 
-    private static CardHolderCarInfo getCardHolderCarInfo(ExcelEmployees employee) {
+    private static CardHolderCarInfo getCardHolderCarInfo(ExcelEmployees employee, CardHolderCarInfo cardHolderCarInfo) {
 
-        CardHolderCarInfo cardHolderCarInfo = new CardHolderCarInfo();
         cardHolderCarInfo.setCarBrand(employee.getCarBrand());
         cardHolderCarInfo.setCarModel(employee.getCarModel());
         cardHolderCarInfo.setColor(employee.getColor());

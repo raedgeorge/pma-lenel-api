@@ -34,7 +34,7 @@ public class TaskExecutorConfig {
         log.info("task executed");
     }
 
-    @Scheduled(cron = "00 17 00 ? * TUE")
+    @Scheduled(cron = "00 14 23 ? * WED")
     public void insuranceExpiryCheckWeeklySchedule(){
 
         cardHoldersService.getCardHoldersLicenseExpireInOneWeek().forEach(cardHolder -> {
@@ -44,7 +44,7 @@ public class TaskExecutorConfig {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            messageService.sendMessage(cardHolder.getFirstName().concat(" ").concat(cardHolder.getLastName()));
+            messageService.sendMessage(cardHolder.getFirstName().concat(" - ").concat(String.valueOf(cardHolder.getBadgeId())));
 
         });
         log.info("task executed");

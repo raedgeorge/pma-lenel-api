@@ -69,9 +69,9 @@ public class ReportsController {
 
     @GetMapping("/filter")
     public void employeesReportByInsuranceDate(@RequestParam String startDate,
-                                                      @RequestParam String endDate,
-                                                      @RequestParam String fileFormat,
-                                                      HttpServletResponse response){
+                                               @RequestParam String endDate,
+                                               @RequestParam String fileFormat,
+                                               HttpServletResponse response){
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate start = LocalDate.parse(startDate, formatter);
