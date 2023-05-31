@@ -26,7 +26,7 @@
                 <textElement textAlignment="Center" verticalAlignment="Middle">
                     <font size="16" isBold="true"/>
                 </textElement>
-                <text><![CDATA[Employee Report]]></text>
+                <text><![CDATA[Single Employee Report]]></text>
             </staticText>
             <staticText>
                 <reportElement x="0" y="0" width="160" height="30" uuid="f5e8ce4e-49f3-4f13-a11a-019954b8846d"/>
@@ -65,7 +65,7 @@
                 <textElement>
                     <font size="11" isBold="true"/>
                 </textElement>
-                <textFieldExpression><![CDATA["Name: " + $P{firstName} + " " +$P{lastName}]]></textFieldExpression>
+                <textFieldExpression><![CDATA["Employee Name: " + $P{firstName} + " " +$P{lastName}]]></textFieldExpression>
             </textField>
         </band>
     </title>

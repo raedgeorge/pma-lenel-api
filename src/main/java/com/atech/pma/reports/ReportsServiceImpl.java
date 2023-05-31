@@ -5,7 +5,6 @@ import com.atech.pma.mappers.CardHolderMapper;
 import com.atech.pma.model.CardHolderDTO;
 import com.atech.pma.repository.mysql.CardHolderRepository;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -13,6 +12,8 @@ import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
 import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 import net.sf.jasperreports.export.SimpleXlsxReportConfiguration;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -29,13 +30,20 @@ import static com.atech.pma.constants.AppStaticData.*;
  */
 @Slf4j
 @Service
-@AllArgsConstructor
 public class ReportsServiceImpl implements ReportsService{
 
     private final CardHolderRepository cardHolderRepository;
     private final CardHolderMapper cardHolderMapper;
+    private final String path;
 
-    private final String path = "c:\\Users\\User\\Downloads\\";
+    public ReportsServiceImpl(CardHolderRepository cardHolderRepository,
+                              CardHolderMapper cardHolderMapper,
+                              @Value("${reports.path}") String path) {
+
+        this.cardHolderRepository = cardHolderRepository;
+        this.cardHolderMapper = cardHolderMapper;
+        this.path = path;
+    }
 
     @Override
     public void generateAllCardHoldersReport(String fileFormat, HttpServletResponse response) {
