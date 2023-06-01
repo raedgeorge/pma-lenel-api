@@ -80,18 +80,5 @@ public class ReportsController {
         reportsService.generateReportByCarInsurance(start, end, fileFormat, response);
     }
 
-    @GetMapping("/pdf/{id}")
-    public ResponseEntity<?> getPdfFile(@PathVariable int id) throws MalformedURLException {
 
-        File file = reportsService.getFile(id);
-
-        Resource resource = new UrlResource(file.getPath());
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("File-Name", file.getName());
-        headers.add(CONTENT_DISPOSITION, "attachment;File-Name= " + resource.getFilename());
-
-        return ResponseEntity.ok().contentType(MediaType.parseMediaType("pdf"))
-                .headers(headers).body(resource);
-    }
 }

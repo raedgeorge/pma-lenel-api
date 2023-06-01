@@ -40,7 +40,7 @@ public class AppSecurityConfig {
             public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
 
                 CorsConfiguration corsConfiguration = new CorsConfiguration();
-                corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:4200", "http://192.168.1.3:8080", "http://192.168.1.3:4200"));
+                corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:4200", "http://192.168.1.208:8080", "http://192.168.1.3:4200"));
 //                corsConfiguration.setAllowedOrigins(Collections.singletonList(corsUrl));
                 corsConfiguration.setAllowedMethods(Collections.singletonList("*"));
                 corsConfiguration.setAllowedHeaders(Collections.singletonList("*"));

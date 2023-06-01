@@ -14,10 +14,9 @@ public interface ReportsService {
     void generateAllCardHoldersReport(String fileFormat, HttpServletResponse response);
 
     void generateSingleCardHolderReport(int badgeId, String fileFormat, HttpServletResponse response);
+
     void generateReportByDrivingLicense(LocalDate startDate, LocalDate endDate, String fileFormat, HttpServletResponse response);
 
     void generateReportByCarInsurance(LocalDate startDate, LocalDate endDate, String fileFormat, HttpServletResponse response);
-
-    File getFile(long cardHolderId);
 
 }

@@ -12,15 +12,16 @@ import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
 import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 import net.sf.jasperreports.export.SimpleXlsxReportConfiguration;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import static com.atech.pma.constants.AppStaticData.*;
 
@@ -34,15 +35,12 @@ public class ReportsServiceImpl implements ReportsService{
 
     private final CardHolderRepository cardHolderRepository;
     private final CardHolderMapper cardHolderMapper;
-    private final String path;
 
     public ReportsServiceImpl(CardHolderRepository cardHolderRepository,
-                              CardHolderMapper cardHolderMapper,
-                              @Value("${reports.path}") String path) {
+                              CardHolderMapper cardHolderMapper) {
 
         this.cardHolderRepository = cardHolderRepository;
         this.cardHolderMapper = cardHolderMapper;
-        this.path = path;
     }
 
     @Override
@@ -64,25 +62,13 @@ public class ReportsServiceImpl implements ReportsService{
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, new JREmptyDataSource());
 
             if (fileFormat.equals(PdfFileFormat)){
-                JasperExportManager.exportReportToPdfFile(jasperPrint, path +"all-card-holders-report-" + LocalDate.now() + PdfExtension);
-                log.info("pdf report generated successfully");
+
+                exportPdfReport(response, jasperPrint);
             }
 
             if (fileFormat.equals(ExcelFileFormat)) {
 
-                JRXlsxExporter exporter = new JRXlsxExporter();
-                SimpleXlsxReportConfiguration xlsxReportConfiguration = new SimpleXlsxReportConfiguration();
-                xlsxReportConfiguration.setSheetNames(new String[]{"sheet1"});
-
-                exporter.setConfiguration(xlsxReportConfiguration);
-                exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-                exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(response.getOutputStream()));
-
-                response.setHeader("Content-Disposition", "attachment;filename=jasperReport.xlsx");
-                response.setContentType("application/octet-stream");
-                exporter.exportReport();
-
-                log.info("excel report generated successfully");
+                exportExcelReport(response, jasperPrint);
             }
         } catch (JRException | IOException e) {
             throw new RuntimeException(e);
@@ -116,25 +102,13 @@ public class ReportsServiceImpl implements ReportsService{
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, new JREmptyDataSource());
 
             if (fileFormat.equals(PdfFileFormat)){
-                JasperExportManager.exportReportToPdfFile(jasperPrint, path + "single-card-holder-report-" + LocalDate.now() + PdfExtension);
-                log.info("pdf report generated successfully");
+
+                exportPdfReport(response, jasperPrint);
             }
 
             if (fileFormat.equals(ExcelFileFormat)) {
 
-                JRXlsxExporter exporter = new JRXlsxExporter();
-                SimpleXlsxReportConfiguration xlsxReportConfiguration = new SimpleXlsxReportConfiguration();
-                xlsxReportConfiguration.setSheetNames(new String[]{"sheet1"});
-
-                exporter.setConfiguration(xlsxReportConfiguration);
-                exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-                exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(response.getOutputStream()));
-
-                response.setHeader("Content-Disposition", "attachment;filename=jasperReport.xlsx");
-                response.setContentType("application/octet-stream");
-                exporter.exportReport();
-
-                log.info("excel report generated successfully");
+                exportExcelReport(response, jasperPrint);
             }
 
         } catch (JRException | IOException e) {
@@ -168,25 +142,13 @@ public class ReportsServiceImpl implements ReportsService{
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, new JREmptyDataSource());
 
             if (fileFormat.equals(PdfFileFormat)){
-                JasperExportManager.exportReportToPdfFile(jasperPrint, path + "card-holders-by-driving-license-" + LocalDate.now() + PdfExtension);
-                log.info("pdf report generated successfully");
+
+                exportPdfReport(response, jasperPrint);
             }
 
             if (fileFormat.equals(ExcelFileFormat)) {
 
-                JRXlsxExporter exporter = new JRXlsxExporter();
-                SimpleXlsxReportConfiguration xlsxReportConfiguration = new SimpleXlsxReportConfiguration();
-                xlsxReportConfiguration.setSheetNames(new String[]{"sheet1"});
-
-                exporter.setConfiguration(xlsxReportConfiguration);
-                exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-                exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(response.getOutputStream()));
-
-                response.setHeader("Content-Disposition", "attachment;filename=jasperReport.xlsx");
-                response.setContentType("application/octet-stream");
-                exporter.exportReport();
-
-                log.info("excel report generated successfully");
+                exportExcelReport(response, jasperPrint);
             }
         } catch (JRException | IOException e) {
             throw new RuntimeException(e);
@@ -218,67 +180,39 @@ public class ReportsServiceImpl implements ReportsService{
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, new JREmptyDataSource());
 
             if (fileFormat.equals(PdfFileFormat)){
-                JasperExportManager.exportReportToPdfFile(jasperPrint, path + "card-holders-by-insurance-license-" + LocalDate.now() + PdfExtension);
-                log.info("pdf report generated successfully");
+
+                exportPdfReport(response, jasperPrint);
             }
 
             if (fileFormat.equals(ExcelFileFormat)) {
 
-                JRXlsxExporter exporter = new JRXlsxExporter();
-                SimpleXlsxReportConfiguration xlsxReportConfiguration = new SimpleXlsxReportConfiguration();
-                xlsxReportConfiguration.setSheetNames(new String[]{"sheet1"});
-
-                exporter.setConfiguration(xlsxReportConfiguration);
-                exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-                exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(response.getOutputStream()));
-
-                response.setHeader("Content-Disposition", "attachment;filename=jasperReport.xlsx");
-                response.setContentType("application/octet-stream");
-                exporter.exportReport();
-
-                log.info("excel report generated successfully");
+                exportExcelReport(response, jasperPrint);
             }
         } catch (JRException | IOException e) {
             throw new RuntimeException(e);
         }
     }
 
+    private static void exportExcelReport(HttpServletResponse response, JasperPrint jasperPrint) throws IOException, JRException {
+        JRXlsxExporter exporter = new JRXlsxExporter();
+        SimpleXlsxReportConfiguration xlsxReportConfiguration = new SimpleXlsxReportConfiguration();
+        xlsxReportConfiguration.setSheetNames(new String[]{"sheet1"});
 
-    @Override
-    public File getFile(long cardHolderId) {
+        exporter.setConfiguration(xlsxReportConfiguration);
+        exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+        exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(response.getOutputStream()));
 
-        Optional<CardHolder> optionalCardHolder = cardHolderRepository.findById(cardHolderId);
-
-        if (optionalCardHolder.isEmpty()){
-            return null;
-        }
-        File pdfFile = null;
-
-//        CardHolder cardHolder = optionalCardHolder.get();
-//
-//        InputStream filePath = getClass().getResourceAsStream(SingleCardHolderReportName);
-//
-//        Map<String, Object> params = loadSingleCardHolderParams(cardHolder);
-//
-//        try {
-//            JasperReport jasperReport = JasperCompileManager.compileReport(filePath);
-//            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, new JREmptyDataSource());
-//
-//            pdfFile = File.createTempFile("report-file", PdfFileFormat);
-//            FileOutputStream fileOutputStream = new FileOutputStream(pdfFile);
-//            JasperExportManager.exportReportToPdfStream(jasperPrint, fileOutputStream);
-//
-//            log.info("report generated successfully");
-//
-//
-//        } catch (JRException | IOException e) {
-//            throw new RuntimeException(e);
-//        }
-
-        return pdfFile;
-
+        response.setHeader("Content-Disposition", "attachment;filename=jasperReport.xlsx");
+        response.setContentType("application/octet-stream");
+        exporter.exportReport();
     }
 
+    private static void exportPdfReport(HttpServletResponse response, JasperPrint jasperPrint) throws IOException, JRException {
+        response.setContentType("application/x-download");
+        response.setHeader("Content-Disposition", "attachment; filename=\"all-employees-report-" + LocalDate.now() + ".pdf\"");
+        OutputStream outputStream = response.getOutputStream();
+        JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
+    }
 
     private Map<String, Object> loadSingleCardHolderParams(CardHolderDTO cardHolder) {
 
