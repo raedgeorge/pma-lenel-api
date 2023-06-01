@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -14,6 +15,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
+import java.net.InetAddress;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -28,10 +30,23 @@ public class AppSecurityConfig {
     @Value("${spring.cors.url}")
     private String corsUrl;
 
+    private final Environment environment;
+
+    public AppSecurityConfig(Environment environment) {
+        this.environment = environment;
+    }
+
     @Bean
     public SecurityFilterChain security(HttpSecurity http) throws Exception {
 
         http.csrf().disable();
+
+        String protocol = "http://";
+        String localAddress = InetAddress.getLocalHost().getHostAddress();
+        String serverPort = environment.getProperty("server.port");
+        String contextPath = environment.getProperty("server.servlet.context-path");
+
+        String url = protocol + localAddress + ":" + serverPort;
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
@@ -40,8 +55,9 @@ public class AppSecurityConfig {
             public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
 
                 CorsConfiguration corsConfiguration = new CorsConfiguration();
-                corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:4200", "http://192.168.1.208:8080", "http://192.168.1.3:4200"));
-//                corsConfiguration.setAllowedOrigins(Collections.singletonList(corsUrl));
+                corsConfiguration.setAllowedOrigins(Arrays.asList("http://192.168.1.200:8080","http://localhost:4200", "http://192.168.1.3:4200",
+                        "http://localhost:8080", "http://192.168.1.3:8080", "http://192.168.1.200:4200"));
+//                corsConfiguration.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
                 corsConfiguration.setAllowedMethods(Collections.singletonList("*"));
                 corsConfiguration.setAllowedHeaders(Collections.singletonList("*"));
                 corsConfiguration.setExposedHeaders(Arrays.asList("Authorization", "Expired"));

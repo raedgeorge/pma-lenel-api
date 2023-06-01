@@ -8,12 +8,15 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 @SpringBootApplication
 public class PmaLenelBackendApplication extends SpringBootServletInitializer {
 
+
+
     public static void main(String[] args) {
-        SpringApplication.run(PmaLenelBackendApplication.class, args);
+        SpringApplication.run(PmaLenelBackendApplication.class, args);;
     }
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
         return builder.sources(PmaLenelBackendApplication.class);
     }
+
 }
