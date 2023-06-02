@@ -1,5 +1,8 @@
 package com.atech.pma.config;
 
+import com.atech.pma.model.AlertDTO;
+import com.atech.pma.model.CardHolderDTO;
+import com.atech.pma.service.AlertsService;
 import com.atech.pma.service.CardHoldersService;
 import com.atech.pma.service.MessageService;
 import lombok.AllArgsConstructor;
@@ -19,8 +22,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 @AllArgsConstructor
 public class TaskExecutorConfig {
 
-    private final CardHoldersService cardHoldersService;
+    private final AlertsService alertsService;
     private final MessageService messageService;
+    private final CardHoldersService cardHoldersService;
 
     @Scheduled(cron = "00 00 08 * * ?")
     public void insuranceExpiryCheckDailySchedule(){
@@ -32,8 +36,8 @@ public class TaskExecutorConfig {
         log.info("task executed");
     }
 
-    @Scheduled(cron = "00 15 22 ? * FRI")
-//    @Scheduled(fixedRate = 50000L, initialDelay = 25000L)
+//    @Scheduled(cron = "00 15 22 ? * FRI")
+    @Scheduled(fixedRate = 50000L, initialDelay = 25000L)
     public void insuranceExpiryCheckWeeklySchedule(){
 
         cardHoldersService.getCardHoldersLicenseExpireInOneWeek().forEach(cardHolder -> {
@@ -43,6 +47,13 @@ public class TaskExecutorConfig {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+
+            AlertDTO alertDto = alertsService.findAlertByEmployeeBadgeId(cardHolder.getBadgeId());
+            if (alertDto == null){
+                AlertDTO alertDTO = createNewAlert(cardHolder);
+                alertsService.addNewAlert(alertDTO);
+            }
+
             messageService.sendMessage(cardHolder.getFirstName().toLowerCase().concat(" - ").concat(String.valueOf(cardHolder.getBadgeId())));
 
         });
@@ -55,9 +66,26 @@ public class TaskExecutorConfig {
                 throw new RuntimeException(e);
             }
 
+            AlertDTO alertDto = alertsService.findAlertByEmployeeBadgeId(cardHolder.getBadgeId());
+
+            if (alertDto == null){
+                AlertDTO alertDTO = createNewAlert(cardHolder);
+                alertsService.addNewAlert(alertDTO);
+            }
+
             messageService.sendMessage(cardHolder.getFirstName().toLowerCase().concat(" - ").concat(String.valueOf(cardHolder.getBadgeId())));
         });
 
         log.info("task executed");
+    }
+
+    private static AlertDTO createNewAlert(CardHolderDTO cardHolder) {
+
+        AlertDTO alertDTO = new AlertDTO();
+        alertDTO.setEmployeeBadgeId(cardHolder.getBadgeId());
+        alertDTO.setFirstName(cardHolder.getFirstName());
+        alertDTO.setLastName(cardHolder.getLastName());
+
+        return alertDTO;
     }
 }

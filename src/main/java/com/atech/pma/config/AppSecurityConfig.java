@@ -76,6 +76,7 @@ public class AppSecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/api/users/register").permitAll()
                 .requestMatchers("/swagger-ui.html/**").permitAll()
                 .requestMatchers("/api/employee/image/**").permitAll()
+                .requestMatchers("/api/alerts/**").authenticated()
                 .requestMatchers(HttpMethod.GET,"/api/employees/**").authenticated()
                 .requestMatchers(HttpMethod.PUT, "/api/excel/upload").authenticated()
                 .requestMatchers(HttpMethod.GET,"/api/users/logout").authenticated()
