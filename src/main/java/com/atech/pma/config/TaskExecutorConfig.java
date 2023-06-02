@@ -8,8 +8,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import java.time.LocalDate;
-
 /**
  * @author raed abu Sa'da
  * on 14/04/2023
@@ -34,7 +32,8 @@ public class TaskExecutorConfig {
         log.info("task executed");
     }
 
-    @Scheduled(cron = "00 14 23 ? * WED")
+    @Scheduled(cron = "00 15 22 ? * FRI")
+//    @Scheduled(fixedRate = 50000L, initialDelay = 25000L)
     public void insuranceExpiryCheckWeeklySchedule(){
 
         cardHoldersService.getCardHoldersLicenseExpireInOneWeek().forEach(cardHolder -> {
@@ -44,9 +43,21 @@ public class TaskExecutorConfig {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            messageService.sendMessage(cardHolder.getFirstName().concat(" - ").concat(String.valueOf(cardHolder.getBadgeId())));
+            messageService.sendMessage(cardHolder.getFirstName().toLowerCase().concat(" - ").concat(String.valueOf(cardHolder.getBadgeId())));
 
         });
+
+        cardHoldersService.getCardHoldersByExpiringDrivingLicense().forEach(cardHolder -> {
+
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+            messageService.sendMessage(cardHolder.getFirstName().toLowerCase().concat(" - ").concat(String.valueOf(cardHolder.getBadgeId())));
+        });
+
         log.info("task executed");
     }
 }

@@ -86,28 +86,54 @@ public class CardHoldersServiceImpl implements CardHoldersService {
         return cardHolderRepository.findAll();
     }
 
-    @Override
-    public List<CardHolder> getCardHoldersListForSchedule() {
-
-        return cardHolderRepository.findAll();
-    }
 
     @Override
     public List<CardHolderDTO> getCardHoldersLicenseExpireInOneWeek() {
 
         List<CardHolderDTO> cardHolderDTOList = new ArrayList<>();
 
-        LocalDate startDate = LocalDate.now().minusDays(7);
-        LocalDate endDate = LocalDate.now();
+        LocalDate startDate = LocalDate.now();
+        LocalDate endDate = LocalDate.now().plusDays(20);
+
+        Optional<List<CardHolder>> optionalCardHolders = cardHolderRepository.findAllByDrivingLicenseExpiryDateBetween(startDate, endDate);
 
         Optional<List<CardHolder>> optionalCardHolderList = cardHolderRepository.findCardHoldersFilteredByInsuranceDate(startDate, endDate);
 
-        if (!optionalCardHolderList.isPresent()){
+        if (!optionalCardHolderList.isPresent() && !optionalCardHolders.isPresent() ){
             return null;
         }
 
-        optionalCardHolderList.get().forEach(cardHolder -> {
+        if (optionalCardHolders.isPresent()){
+            optionalCardHolders.get().forEach(cardHolder -> {
+                cardHolderDTOList.add(cardHolderMapper.toDto(cardHolder));
+            });
+        }
 
+        if (optionalCardHolderList.isPresent()){
+            optionalCardHolderList.get().forEach(cardHolder -> {
+
+                cardHolderDTOList.add(cardHolderMapper.toDto(cardHolder));
+            });
+        }
+
+        return cardHolderDTOList;
+    }
+
+    @Override
+    public List<CardHolderDTO> getCardHoldersByExpiringDrivingLicense() {
+
+        List<CardHolderDTO> cardHolderDTOList = new ArrayList<>();
+
+        LocalDate startDate = LocalDate.now();
+        LocalDate endDate = LocalDate.now().plusDays(20);
+
+        Optional<List<CardHolder>> optionalCardHolders = cardHolderRepository.findAllByDrivingLicenseExpiryDateBetween(startDate, endDate);
+
+        if (!optionalCardHolders.isPresent()){
+            return null;
+        }
+
+        optionalCardHolders.get().forEach(cardHolder -> {
             cardHolderDTOList.add(cardHolderMapper.toDto(cardHolder));
         });
 

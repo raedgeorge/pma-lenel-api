@@ -14,8 +14,6 @@ public interface CardHoldersService {
 
     List<CardHolder> getCardHoldersList();
 
-    List<CardHolder> getCardHoldersListForSchedule();
-
     CardHolder findCardHolderById(Long id);
 
     CardHolder updateCardHolder(CardHolder cardHolder);
@@ -23,6 +21,8 @@ public interface CardHoldersService {
     void deleteCardHolder(long id);
 
     List<CardHolderDTO> getCardHoldersLicenseExpireInOneWeek();
+
+    List<CardHolderDTO> getCardHoldersByExpiringDrivingLicense();
 
     List<CardHolderDTO> getCardHoldersExpiringToday();
 
