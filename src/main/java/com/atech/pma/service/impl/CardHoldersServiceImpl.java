@@ -65,9 +65,12 @@ public class CardHoldersServiceImpl implements CardHoldersService {
                         cardHolder.setBadgeId(badge.getBadgeId());
                         cardHolder.setFirstName(employeeInDB.getFirstName());
                         cardHolder.setLastName(employeeInDB.getLastName());
-                        cardHolder.setDrivingLicenseExpiryDate(LocalDate.now());
+                        cardHolder.setDrivingLicenseExpiryDate(LocalDate.of(2000, 1, 1));
 
                         CardHolderCarInfo cardHolderCarInfo = new CardHolderCarInfo();
+
+                        cardHolderCarInfo.setInsuranceExpiryDate(LocalDate.of(2000, 1, 1));
+                        cardHolderCarInfo.setRegistrationExpiryDate(LocalDate.of(2000, 1, 1));
                         cardHolderCarInfo.setPlateNumber(RandomStringUtils.randomAlphanumeric(6));
                         cardHolder.setCardHolderCarInfo(cardHolderCarInfo);
 
@@ -119,26 +122,26 @@ public class CardHoldersServiceImpl implements CardHoldersService {
         return cardHolderDTOList;
     }
 
-    @Override
-    public List<CardHolderDTO> getCardHoldersByExpiringDrivingLicense() {
-
-        List<CardHolderDTO> cardHolderDTOList = new ArrayList<>();
-
-        LocalDate startDate = LocalDate.now();
-        LocalDate endDate = LocalDate.now().plusDays(20);
-
-        Optional<List<CardHolder>> optionalCardHolders = cardHolderRepository.findAllByDrivingLicenseExpiryDateBetween(startDate, endDate);
-
-        if (!optionalCardHolders.isPresent()){
-            return null;
-        }
-
-        optionalCardHolders.get().forEach(cardHolder -> {
-            cardHolderDTOList.add(cardHolderMapper.toDto(cardHolder));
-        });
-
-        return cardHolderDTOList;
-    }
+//    @Override
+//    public List<CardHolderDTO> getCardHoldersByExpiringDrivingLicense() {
+//
+//        List<CardHolderDTO> cardHolderDTOList = new ArrayList<>();
+//
+//        LocalDate startDate = LocalDate.now();
+//        LocalDate endDate = LocalDate.now().plusDays(20);
+//
+//        Optional<List<CardHolder>> optionalCardHolders = cardHolderRepository.findAllByDrivingLicenseExpiryDateBetween(startDate, endDate);
+//
+//        if (!optionalCardHolders.isPresent()){
+//            return null;
+//        }
+//
+//        optionalCardHolders.get().forEach(cardHolder -> {
+//            cardHolderDTOList.add(cardHolderMapper.toDto(cardHolder));
+//        });
+//
+//        return cardHolderDTOList;
+//    }
 
     @Override
     public List<CardHolderDTO> getCardHoldersExpiringToday() {

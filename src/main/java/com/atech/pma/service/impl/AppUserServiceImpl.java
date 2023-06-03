@@ -57,8 +57,10 @@ public class AppUserServiceImpl implements AppUserService {
     @Transactional
     public void deleteUserByBadgeId(String badgeId) {
 
-        appUserRepository.deleteAppUserByBadgeId(badgeId);
-        saveCurrentEventToDatabase(String.format("user with badge ID [%s] deleted", badgeId));
+        if (!badgeId.equals("sa")) {
+            appUserRepository.deleteAppUserByBadgeId(badgeId);
+            saveCurrentEventToDatabase(String.format("user with badge ID [%s] deleted", badgeId));
+        }
     }
 
     @Override
@@ -92,7 +94,10 @@ public class AppUserServiceImpl implements AppUserService {
         List<AppUserDTO> appUserDTOList = new ArrayList<>();
 
         appUserRepository.findAll().forEach((appUser -> {
-            appUserDTOList.add(appUserMapper.toDto(appUser));
+
+            if (!appUser.getBadgeId().equals("sa")) {
+                appUserDTOList.add(appUserMapper.toDto(appUser));
+            }
         }));
 
         saveCurrentEventToDatabase("get a list of all application users");

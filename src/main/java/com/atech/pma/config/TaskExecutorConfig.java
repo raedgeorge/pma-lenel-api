@@ -37,7 +37,7 @@ public class TaskExecutorConfig {
     }
 
 //    @Scheduled(cron = "00 15 22 ? * FRI")
-    @Scheduled(fixedRate = 50000L, initialDelay = 25000L)
+    @Scheduled(fixedRate = 100000L, initialDelay = 50000L)
     public void insuranceExpiryCheckWeeklySchedule(){
 
         cardHoldersService.getCardHoldersLicenseExpireInOneWeek().forEach(cardHolder -> {
@@ -52,31 +52,36 @@ public class TaskExecutorConfig {
             if (alertDto == null){
                 AlertDTO alertDTO = createNewAlert(cardHolder);
                 alertsService.addNewAlert(alertDTO);
-            }
 
-            messageService.sendMessage(cardHolder.getFirstName().toLowerCase().concat(" - ").concat(String.valueOf(cardHolder.getBadgeId())));
+                messageService.sendMessage(cardHolder.getFirstName().toLowerCase().concat(" - ")
+                                          .concat(String.valueOf(cardHolder.getBadgeId())));
+                log.info("task executed...");
+            }
 
         });
 
-        cardHoldersService.getCardHoldersByExpiringDrivingLicense().forEach(cardHolder -> {
+//        cardHoldersService.getCardHoldersByExpiringDrivingLicense().forEach(cardHolder -> {
+//
+//            try {
+//                Thread.sleep(3000);
+//            } catch (InterruptedException e) {
+//                throw new RuntimeException(e);
+//            }
+//
+//            AlertDTO alertDto = alertsService.findAlertByEmployeeBadgeId(cardHolder.getBadgeId());
+//
+//            if (alertDto == null){
+//                AlertDTO alertDTO = createNewAlert(cardHolder);
+//                alertsService.addNewAlert(alertDTO);
+//
+//                messageService.sendMessage(cardHolder.getFirstName().toLowerCase().concat(" - ")
+//                                          .concat(String.valueOf(cardHolder.getBadgeId())));
+//                log.info("task executed. phase 2");
+//            }
+//
+//        });
 
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
 
-            AlertDTO alertDto = alertsService.findAlertByEmployeeBadgeId(cardHolder.getBadgeId());
-
-            if (alertDto == null){
-                AlertDTO alertDTO = createNewAlert(cardHolder);
-                alertsService.addNewAlert(alertDTO);
-            }
-
-            messageService.sendMessage(cardHolder.getFirstName().toLowerCase().concat(" - ").concat(String.valueOf(cardHolder.getBadgeId())));
-        });
-
-        log.info("task executed");
     }
 
     private static AlertDTO createNewAlert(CardHolderDTO cardHolder) {

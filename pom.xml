@@ -68,6 +68,7 @@
             <version>0.11.5</version>
             <scope>runtime</scope>
         </dependency>
+        <!-- End of JWT dependencies -->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

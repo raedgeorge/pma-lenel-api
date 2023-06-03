@@ -21,4 +21,8 @@ public class MessageService {
         messagingTemplate.convertAndSend("/topic/notification" , employeeName);
     }
 
+    public void sendAlertDeletedMessage(){
+        messagingTemplate.convertAndSend("/topic/refresh", "refresh");
+    }
+
 }

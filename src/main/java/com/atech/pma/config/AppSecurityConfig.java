@@ -56,8 +56,8 @@ public class AppSecurityConfig {
 
                 CorsConfiguration corsConfiguration = new CorsConfiguration();
                 corsConfiguration.setAllowedOrigins(Arrays.asList(
-                        "http://192.168.1.200:8080", "http://localhost:4200", "http://192.168.1.3:4200",
-                        "http://localhost:8080", "http://192.168.1.3:8080", "http://192.168.1.200:4200"));
+                        "http://192.168.1.200:8080", "http://localhost:4200", "http://192.168.1.9:4200",
+                        "http://localhost:8080", "http://192.168.1.9:8080", "http://192.168.1.200:4200"));
                 corsConfiguration.setAllowedMethods(Collections.singletonList("*"));
                 corsConfiguration.setAllowedHeaders(Collections.singletonList("*"));
                 corsConfiguration.setExposedHeaders(Arrays.asList("Authorization", "Expired"));

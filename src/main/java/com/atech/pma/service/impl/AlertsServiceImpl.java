@@ -5,6 +5,7 @@ import com.atech.pma.mappers.AlertsMapper;
 import com.atech.pma.model.AlertDTO;
 import com.atech.pma.repository.mysql.AlertsRepository;
 import com.atech.pma.service.AlertsService;
+import com.atech.pma.service.MessageService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,7 @@ import java.util.Optional;
 public class AlertsServiceImpl implements AlertsService {
 
     private final AlertsMapper alertsMapper;
+    private final MessageService messageService;
     private final AlertsRepository alertsRepository;
 
     @Override
@@ -62,6 +64,7 @@ public class AlertsServiceImpl implements AlertsService {
             // TODO
         }
 
+        messageService.sendAlertDeletedMessage();
         alertsRepository.deleteByEmployeeBadgeId(employeeBadgeId);
     }
 }

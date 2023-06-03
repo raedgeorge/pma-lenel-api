@@ -22,8 +22,6 @@ public interface CardHoldersService {
 
     List<CardHolderDTO> getCardHoldersLicenseExpireInOneWeek();
 
-    List<CardHolderDTO> getCardHoldersByExpiringDrivingLicense();
-
     List<CardHolderDTO> getCardHoldersExpiringToday();
 
     void populateCardHoldersFromOnguardDB();

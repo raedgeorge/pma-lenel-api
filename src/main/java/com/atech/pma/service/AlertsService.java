@@ -11,5 +11,6 @@ public interface AlertsService {
     void addNewAlert(AlertDTO alert);
 
     AlertDTO findAlertByEmployeeBadgeId(int employeeBadgeId);
+
     void deleteAlertByBadgeId(int employeeBadgeId);
 }
