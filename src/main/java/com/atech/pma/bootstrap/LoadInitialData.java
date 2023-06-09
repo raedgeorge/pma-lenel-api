@@ -21,15 +21,15 @@ public class LoadInitialData implements CommandLineRunner {
     @Transactional
     public void run(String... args) throws Exception {
 
-        Optional<AppUser> optionalAppUser = appUserRepository.getAppUserByBadgeId("sa");
+        Optional<AppUser> optionalAppUser = appUserRepository.getAppUserByBadgeId("admin");
 
         if (!optionalAppUser.isPresent()){
 
             AppUser appUser = new AppUser();
-            appUser.setBadgeId("sa");
+            appUser.setBadgeId("admin");
             appUser.setRole("admin");
-            appUser.setFirstName("system account");
-            appUser.setLastName("pma lenel administrator");
+            appUser.setFirstName("System");
+            appUser.setLastName("Admin");
             appUser.setPassword(passwordEncoder.encode("B@t@1234$$"));
 
             appUserRepository.save(appUser);

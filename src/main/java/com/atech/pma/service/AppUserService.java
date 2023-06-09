@@ -23,4 +23,6 @@ public interface AppUserService {
     WebResponseDTO changeUserPasswordByAdmin(AppUserDTO appUserDTO, String adminId);
 
     WebResponseDTO changeUserPassword(PasswordReset passwordReset, String userBadgeId);
+
+    void updateAppUser(AppUserDTO appUserDTO);
 }

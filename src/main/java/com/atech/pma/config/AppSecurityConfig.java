@@ -56,8 +56,9 @@ public class AppSecurityConfig {
 
                 CorsConfiguration corsConfiguration = new CorsConfiguration();
                 corsConfiguration.setAllowedOrigins(Arrays.asList(
-                        "http://192.168.1.200:8080", "http://localhost:4200", "http://192.168.1.9:4200",
-                        "http://localhost:8080", "http://192.168.1.9:8080", "http://192.168.1.200:4200"));
+                        "http://192.168.1.200:8080", "http://localhost:4200", "http://192.168.1.6:4200",
+                        "http://192.168.1.208:8080", "http://192.168.1.208:4200",
+                        "http://localhost:8080", "http://192.168.1.6:8080", "http://192.168.1.200:4200"));
                 corsConfiguration.setAllowedMethods(Collections.singletonList("*"));
                 corsConfiguration.setAllowedHeaders(Collections.singletonList("*"));
                 corsConfiguration.setExposedHeaders(Arrays.asList("Authorization", "Expired"));
@@ -78,7 +79,7 @@ public class AppSecurityConfig {
                 .requestMatchers("/api/employee/image/**").permitAll()
                 .requestMatchers("/api/alerts/**").authenticated()
                 .requestMatchers(HttpMethod.GET,"/api/employees/**").authenticated()
-                .requestMatchers(HttpMethod.PUT, "/api/excel/upload").authenticated()
+                .requestMatchers(HttpMethod.GET, "/api/excel/list").authenticated()
                 .requestMatchers(HttpMethod.GET,"/api/users/logout").authenticated()
                 .requestMatchers(HttpMethod.DELETE, "/api/users/delete").authenticated()
                 .requestMatchers(HttpMethod.POST, "/api/users/password-reset").authenticated()

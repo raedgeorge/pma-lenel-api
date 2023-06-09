@@ -63,6 +63,22 @@ public class AppUserServiceImpl implements AppUserService {
         }
     }
 
+
+    @Override
+    public void updateAppUser(AppUserDTO appUserDTO) {
+
+        Optional<AppUser> optionalAppUser = appUserRepository.getAppUserByBadgeId(appUserDTO.getBadgeId());
+
+        if (!optionalAppUser.isPresent()){
+            return;
+        }
+
+        AppUser appUserInDb = optionalAppUser.get();
+        appUserInDb.setLoggedIn(appUserDTO.getLoggedIn());
+
+        appUserRepository.save(appUserInDb);
+    }
+
     @Override
     @Transactional
     public boolean registerNewUser(AppUserDTO appUserDto) {

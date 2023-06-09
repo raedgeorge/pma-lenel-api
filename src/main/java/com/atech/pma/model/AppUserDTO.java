@@ -1,5 +1,6 @@
 package com.atech.pma.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
@@ -18,4 +19,7 @@ public class AppUserDTO {
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
+
+    @JsonIgnore
+    private Boolean loggedIn;
 }

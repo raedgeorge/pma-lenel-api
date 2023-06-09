@@ -30,4 +30,7 @@ public class AppUser {
     private String role;
     private String password;
 
+    @Column(name = "is_logged_in")
+    private Boolean loggedIn;
+
 }

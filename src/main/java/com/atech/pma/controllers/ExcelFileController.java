@@ -22,7 +22,7 @@ public class ExcelFileController {
     private final ExcelService excelService;
     private final ExcelPoijiService excelPoijiService;
 
-    @PutMapping("/upload")
+    @GetMapping("/list")
     public ResponseEntity<String> readEmployeesFromExcelFile(@RequestParam("file") String file){
 
         List<ExcelEmployees> listFromExcelFile = excelPoijiService.getListFromExcelFile(file);

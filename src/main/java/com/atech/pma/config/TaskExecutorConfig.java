@@ -43,7 +43,7 @@ public class TaskExecutorConfig {
         cardHoldersService.getCardHoldersLicenseExpireInOneWeek().forEach(cardHolder -> {
 
             try {
-                Thread.sleep(3000);
+                Thread.sleep(2000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -59,29 +59,6 @@ public class TaskExecutorConfig {
             }
 
         });
-
-//        cardHoldersService.getCardHoldersByExpiringDrivingLicense().forEach(cardHolder -> {
-//
-//            try {
-//                Thread.sleep(3000);
-//            } catch (InterruptedException e) {
-//                throw new RuntimeException(e);
-//            }
-//
-//            AlertDTO alertDto = alertsService.findAlertByEmployeeBadgeId(cardHolder.getBadgeId());
-//
-//            if (alertDto == null){
-//                AlertDTO alertDTO = createNewAlert(cardHolder);
-//                alertsService.addNewAlert(alertDTO);
-//
-//                messageService.sendMessage(cardHolder.getFirstName().toLowerCase().concat(" - ")
-//                                          .concat(String.valueOf(cardHolder.getBadgeId())));
-//                log.info("task executed. phase 2");
-//            }
-//
-//        });
-
-
     }
 
     private static AlertDTO createNewAlert(CardHolderDTO cardHolder) {
