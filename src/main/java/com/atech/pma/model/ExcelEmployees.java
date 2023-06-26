@@ -21,7 +21,7 @@ public class ExcelEmployees {
     private int badgeId;
 
     @ExcelCellName("Employee_Id")
-    private int employeeId;
+    private Double employeeId;
 
     @ExcelCellName("Driving_License_Expiry_Date")
     private String drivingLicenseExpiryDate;

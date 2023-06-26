@@ -26,5 +26,5 @@ public class Employee {
     private String lastName;
 
     @Column(name = "SSNO")
-    private int employeeId;
+    private Double employeeId;
 }

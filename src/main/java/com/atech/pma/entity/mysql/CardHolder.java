@@ -33,8 +33,8 @@ public class CardHolder {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "employee_id", unique = true, nullable = false)
-    private int employeeId;
+    @Column(name = "employee_id", unique = true)
+    private Double employeeId;
 
     @Column(name = "badge_id", unique = true, nullable = false)
     private int badgeId;

@@ -16,7 +16,7 @@ public interface CardHolderRepository extends JpaRepository<CardHolder, Long> {
 
     Optional<CardHolder> findCardHolderByBadgeId(int badgeId);
 
-    List<CardHolder> findAllByEmployeeId(int employeeId);
+    List<CardHolder> findAllByEmployeeId(Double employeeId);
 
     @Query("SELECT e FROM CardHolder e " +
             "JOIN CardHolderCarInfo c " +
