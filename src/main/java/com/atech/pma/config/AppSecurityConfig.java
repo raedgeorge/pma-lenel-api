@@ -18,6 +18,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import java.net.InetAddress;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * @author raed abu Sa'da
@@ -56,10 +57,8 @@ public class AppSecurityConfig {
 
                 CorsConfiguration corsConfiguration = new CorsConfiguration();
                 corsConfiguration.setAllowedOrigins(Arrays.asList(
-                        "http://192.168.1.200:8080", "http://localhost:4200",
-                        "http://192.168.1.208:8080", "http://192.168.1.208:4200",
-                        "http://172.32.32.23:8080", "http://172.32.32.23:4200",
-                        "http://localhost:8080", "http://192.168.1.6:8080", "http://192.168.1.200:4200"));
+                        "http://localhost:8080", "http://localhost:4200",
+                        "http://192.168.1.209:4200", "http://192.168.1.9:8080"));
                 corsConfiguration.setAllowedMethods(Collections.singletonList("*"));
                 corsConfiguration.setAllowedHeaders(Collections.singletonList("*"));
                 corsConfiguration.setExposedHeaders(Arrays.asList("Authorization", "Expired"));

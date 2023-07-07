@@ -1,17 +1,18 @@
 package com.atech.pma.controllers;
 
 import com.atech.pma.entity.mysql.EventHistory;
-import com.atech.pma.model.AppUserDTO;
-import com.atech.pma.model.PasswordReset;
-import com.atech.pma.model.WebResponseDTO;
+import com.atech.pma.model.*;
 import com.atech.pma.service.AppUserService;
 import com.atech.pma.service.EventHistoryService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.ObjectUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
